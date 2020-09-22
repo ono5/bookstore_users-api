@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  api:
+    build:
+        context: .
+    ports:
+      - "8080:8080"
+    container_name: api
+    environment:
+        MYSQL_USER: admin
+        MYSQL_PASSWORD: admin
+        MYSQL_DATABASE: users_db
+        MYSQL_PORT: "users_db:3306"
+    volumes:
+      - ./api:/api
+
+  users_db:
+    image: mysql:5.7.22
+    environment:
+        MYSQL_ROOT_PASSWORD: admin
+        MYSQL_USER: admin
+        MYSQL_PASSWORD: admin
+        MYSQL_DATABASE: users_db
+    container_name: users_db
+    volumes:
+        - ./db/data:/var/lib/mysql
+        - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+        - ./db/sql:/docker-entrypoint-initdb.d
